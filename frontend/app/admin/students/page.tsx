@@ -11,6 +11,7 @@ interface Student {
   group_id?: string;
   school_year?: string;
   enrolled_at?: string;
+  created_at?: string;
 }
 
 export default function StudentManagement() {
@@ -37,7 +38,8 @@ export default function StudentManagement() {
           last_name: patient.last_name,
           email: patient.email,
           school_year: 'Non assigné',
-          enrolled_at: patient.created_at,
+          enrolled_at: patient.created_at ?? new Date().toISOString(),
+          created_at: patient.created_at ?? new Date().toISOString(),
         }));
         setAvailableStudents(students);
       }
