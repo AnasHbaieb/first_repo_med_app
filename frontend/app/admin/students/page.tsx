@@ -13,14 +13,8 @@ interface Student {
   enrolled_at?: string;
 }
 
-interface Group {
-  id: string;
-  name: string;
-}
-
 export default function StudentManagement() {
   const [availableStudents, setAvailableStudents] = useState<Student[]>([]);
-  const [groups, setGroups] = useState<Group[]>([]);
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<string>('');
   const [loading, setLoading] = useState(true);
@@ -36,8 +30,8 @@ export default function StudentManagement() {
     setError('');
     try {
       const response = await get('/patients');
-      if (response.success && response.data) {
-        const students: Student[] = (response.data as any[]).map((patient) => ({
+      if (response.success && Array.isArray(response.data)) {
+        const students: Student[] = response.data.map((patient: Student) => ({
           id: patient.id,
           first_name: patient.first_name,
           last_name: patient.last_name,
