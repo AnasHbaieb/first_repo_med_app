@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///D:/med_crm/frontend/app/auth/layout.tsx"],"sourcesContent":["export default function AuthLayout({\r\n  children,\r\n}: { children: React.ReactNode }) {\r\n  return <div className=\"flex min-h-screen items-center justify-center bg-gray-100\">{children}</div>;\r\n}\r\n"],"names":[],"mappings":";;;;;;AAAe,SAAS,WAAW,EACjC,QAAQ,EACsB;IAC9B,qBAAO,8OAAC;QAAI,WAAU;kBAA6D;;;;;;AACrF","debugId":null}}]
+}

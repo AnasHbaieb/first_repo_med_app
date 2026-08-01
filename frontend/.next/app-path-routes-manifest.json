@@ -1,0 +1,8 @@
+{
+  "/favicon.ico/route": "/favicon.ico",
+  "/_not-found/page": "/_not-found",
+  "/appointments/page": "/appointments",
+  "/patients/page": "/patients",
+  "/page": "/",
+  "/auth/login/page": "/auth/login"
+}
