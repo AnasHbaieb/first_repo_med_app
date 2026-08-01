@@ -1,71 +1,56 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001/api';
-
-interface ApiResponse<T> {
+type ApiResponse<T> = {
   success: boolean;
   data?: T;
+  message?: string;
   error?: string;
-}
+};
 
-function getErrorMessage(error: unknown): string {
-  if (error instanceof Error) return error.message;
-  return 'Une erreur est survenue';
-}
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
 
-async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
+async function request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      ...(options.headers ?? {}),
+    },
+    ...options,
+  });
+
+  const payload = (await response.json()) as ApiResponse<T>;
+
   if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || 'Une erreur est survenue côté serveur');
+    return {
+      success: false,
+      message: payload?.message ?? 'Request failed',
+      error: payload?.error ?? 'Request failed',
+    };
   }
-  const data = await response.json();
-  return { success: true, data };
+
+  return {
+    success: true,
+    data: payload?.data as T,
+    message: payload?.message,
+  };
 }
 
-export async function get<T>(path: string): Promise<ApiResponse<T>> {
-  try {
-    const response = await fetch(`${API_BASE_URL}${path}`);
-    return handleResponse<T>(response);
-  } catch (error: unknown) {
-    return { success: false, error: getErrorMessage(error) };
-  }
+export async function get<T>(endpoint: string): Promise<ApiResponse<T>> {
+  return request<T>(endpoint, { method: 'GET' });
 }
 
-export async function post<T>(path: string, body: unknown): Promise<ApiResponse<T>> {
-  try {
-    const response = await fetch(`${API_BASE_URL}${path}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-    return handleResponse<T>(response);
-  } catch (error: unknown) {
-    return { success: false, error: getErrorMessage(error) };
-  }
+export async function post<T>(endpoint: string, body: unknown): Promise<ApiResponse<T>> {
+  return request<T>(endpoint, {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
 }
 
-export async function put<T>(path: string, body: unknown): Promise<ApiResponse<T>> {
-  try {
-    const response = await fetch(`${API_BASE_URL}${path}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-    return handleResponse<T>(response);
-  } catch (error: unknown) {
-    return { success: false, error: getErrorMessage(error) };
-  }
+export async function put<T>(endpoint: string, body: unknown): Promise<ApiResponse<T>> {
+  return request<T>(endpoint, {
+    method: 'PUT',
+    body: JSON.stringify(body),
+  });
 }
 
-export async function remove<T>(path: string): Promise<ApiResponse<T>> {
-  try {
-    const response = await fetch(`${API_BASE_URL}${path}`, {
-      method: 'DELETE',
-    });
-    return handleResponse<T>(response);
-  } catch (error: unknown) {
-    return { success: false, error: getErrorMessage(error) };
-  }
+export async function del<T>(endpoint: string): Promise<ApiResponse<T>> {
+  return request<T>(endpoint, { method: 'DELETE' });
 }
