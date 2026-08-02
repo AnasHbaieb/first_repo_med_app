@@ -14,6 +14,14 @@ interface Student {
   created_at?: string;
 }
 
+interface PatientResponse {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  created_at?: string;
+}
+
 export default function StudentManagement() {
   const [availableStudents, setAvailableStudents] = useState<Student[]>([]);
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
@@ -30,9 +38,9 @@ export default function StudentManagement() {
     setLoading(true);
     setError('');
     try {
-      const response = await get('/patients');
+      const response = await get<PatientResponse[]>('/patients');
       if (response.success && Array.isArray(response.data)) {
-        const students: Student[] = response.data.map((patient: Student) => ({
+        const students: Student[] = response.data.map((patient: PatientResponse) => ({
           id: patient.id,
           first_name: patient.first_name,
           last_name: patient.last_name,
