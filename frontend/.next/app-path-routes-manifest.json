@@ -1,6 +1,8 @@
 {
   "/_not-found/page": "/_not-found",
   "/auth/login/page": "/auth/login",
+  "/page": "/",
+  "/patients/page": "/patients",
   "/admin/attendance/page": "/admin/attendance",
   "/admin/dashboard/page": "/admin/dashboard",
   "/admin/groups/page": "/admin/groups",
