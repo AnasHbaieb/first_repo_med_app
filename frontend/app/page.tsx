@@ -1,66 +1,33 @@
 import Link from 'next/link';
 
-export default function HomePage() {
+export default function Home() {
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
-      <div className="mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-6 py-16">
-        <nav className="mb-16 flex items-center justify-between">
-          <div className="text-xl font-bold tracking-tight">Med CRM</div>
-          <Link
-            href="/auth/login"
-            className="rounded-full bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-500"
-          >
-            Admin Login
+    <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-12 md:p-24 bg-gradient-to-br from-blue-50 to-purple-50">
+      <div className="text-center mb-12">
+        <h1 className="text-5xl font-extrabold text-gray-900 mb-4">Med-CRM</h1>
+        <p className="text-xl text-gray-700">Système de Gestion des Étudiens</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl w-full">
+        <div className="bg-white p-8 rounded-xl shadow-lg flex flex-col items-center justify-between text-center border border-gray-100">
+          <h2 className="text-2xl font-bold text-blue-700 mb-4">Inscription Étudiant</h2>
+          <p className="text-gray-700 mb-6">{"Formulaire d'inscription pour nouveaux étudiants"}</p>
+          <Link href="/patients" className="w-full">
+            <button className="bg-gray-900 text-white px-8 py-3 rounded-lg text-lg hover:bg-gray-700 transition-colors duration-300 w-full">
+              {"S'inscrire"}
+            </button>
           </Link>
-        </nav>
+        </div>
 
-        <section className="grid items-center gap-10 lg:grid-cols-2">
-          <div>
-            <p className="mb-4 inline-flex rounded-full border border-blue-500/40 bg-blue-500/10 px-3 py-1 text-sm text-blue-200">
-              Medical operations dashboard
-            </p>
-            <h1 className="text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
-              Manage students, groups, and attendance in one place.
-            </h1>
-            <p className="mt-6 max-w-xl text-lg text-slate-300">
-              A clean, fast CRM for academic and medical training operations, built to keep your team organized and informed.
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Link
-                href="/auth/login"
-                className="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-500"
-              >
-                Open dashboard
-              </Link>
-              <Link
-                href="/admin/dashboard"
-                className="rounded-xl border border-slate-700 bg-slate-900 px-6 py-3 font-semibold text-slate-100 transition hover:border-slate-500"
-              >
-                View admin area
-              </Link>
-            </div>
-          </div>
-
-          <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-8 shadow-2xl shadow-blue-950/30">
-            <div className="grid gap-4">
-              <div className="rounded-2xl bg-slate-800 p-4">
-                <p className="text-sm text-slate-400">Active students</p>
-                <p className="mt-2 text-3xl font-bold">1,248</p>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl bg-slate-800 p-4">
-                  <p className="text-sm text-slate-400">Groups</p>
-                  <p className="mt-2 text-2xl font-bold">36</p>
-                </div>
-                <div className="rounded-2xl bg-slate-800 p-4">
-                  <p className="text-sm text-slate-400">Attendance</p>
-                  <p className="mt-2 text-2xl font-bold">96%</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <div className="bg-white p-8 rounded-xl shadow-lg flex flex-col items-center justify-between text-center border border-gray-100">
+          <h2 className="text-2xl font-bold text-green-700 mb-4">Espace Administrateur</h2>
+          <p className="text-gray-700 mb-6">Accès au tableau de bord administrateur</p>
+          <Link href="/auth/login" className="w-full">
+            <button className="border border-gray-300 text-gray-800 px-8 py-3 rounded-lg text-lg hover:bg-gray-100 transition-colors duration-300 w-full">
+              Se connecter
+            </button>
+          </Link>
+        </div>
       </div>
     </main>
   );
