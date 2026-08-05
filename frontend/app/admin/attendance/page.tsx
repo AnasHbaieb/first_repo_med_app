@@ -164,7 +164,7 @@ export default function AttendanceTracking() {
           groupStudents.map((student) => (
             <div key={student.id} className="bg-white rounded-2xl shadow-lg overflow-hidden">
               {/* Student Header */}
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 flex items-center justify-between">
+              <div className="bg-linear-to-r from-blue-600 to-purple-600 text-white p-6 flex items-center justify-between">
                 <div>
                   <h3 className="text-xl font-bold">{student.name}</h3>
                   <p className="text-blue-100">{student.email}</p>

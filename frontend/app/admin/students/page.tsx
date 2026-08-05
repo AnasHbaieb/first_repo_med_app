@@ -198,7 +198,7 @@ export default function StudentManagement() {
           <button
             onClick={handleAssignToGroup}
             disabled={!selectedGroup || selectedStudents.length === 0}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-3 rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-linear-to-r from-blue-600 to-purple-600 text-white font-semibold py-3 rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Assigner au groupe
           </button>
@@ -210,7 +210,7 @@ export default function StudentManagement() {
         {Object.entries(assignedStudents).map(([groupId, students]) => (
           students.length > 0 && (
             <div key={groupId} className="bg-white rounded-2xl shadow-lg overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+              <div className="bg-linear-to-r from-blue-600 to-purple-600 text-white p-6">
                 <h3 className="text-xl font-bold">
                   {groupId === 'group1'
                     ? 'Groupe A - Mathématiques'

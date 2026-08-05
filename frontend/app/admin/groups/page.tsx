@@ -78,7 +78,7 @@ export default function GroupManagement() {
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold px-6 py-3 rounded-lg hover:shadow-lg transition-all"
+          className="bg-linear-to-r from-blue-600 to-purple-600 text-white font-semibold px-6 py-3 rounded-lg hover:shadow-lg transition-all"
         >
           {showForm ? 'Annuler' : '+ Nouveau groupe'}
         </button>
@@ -165,7 +165,7 @@ export default function GroupManagement() {
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-3 rounded-lg hover:shadow-lg transition-all"
+              className="w-full bg-linear-to-r from-blue-600 to-purple-600 text-white font-semibold py-3 rounded-lg hover:shadow-lg transition-all"
             >
               Créer le groupe
             </button>
