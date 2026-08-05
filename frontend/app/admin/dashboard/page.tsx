@@ -14,7 +14,7 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white shadow-lg">
+      <div className="bg-linear-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white shadow-lg">
         <h2 className="text-3xl font-bold mb-2">Bienvenue dans le tableau de bord</h2>
         <p className="text-blue-100">
           Gérez efficacement vos groupes, étudiants et suivez les présences et paiements.
@@ -45,21 +45,21 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             href="/admin/groups"
-            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-6 hover:shadow-lg transition-all text-center font-semibold"
+            className="bg-linear-to-r from-blue-500 to-blue-600 text-white rounded-lg p-6 hover:shadow-lg transition-all text-center font-semibold"
           >
             <div className="text-3xl mb-2">👥</div>
             <div>Créer un groupe</div>
           </Link>
           <Link
             href="/admin/students"
-            className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-6 hover:shadow-lg transition-all text-center font-semibold"
+            className="bg-linear-to-r from-green-500 to-green-600 text-white rounded-lg p-6 hover:shadow-lg transition-all text-center font-semibold"
           >
             <div className="text-3xl mb-2">🎓</div>
             <div>Ajouter un étudiant</div>
           </Link>
           <Link
             href="/admin/attendance"
-            className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-6 hover:shadow-lg transition-all text-center font-semibold"
+            className="bg-linear-to-r from-purple-500 to-purple-600 text-white rounded-lg p-6 hover:shadow-lg transition-all text-center font-semibold"
           >
             <div className="text-3xl mb-2">📋</div>
             <div>Marquer les présences</div>
