@@ -1,15 +1,40 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { supabase } from '@/app/lib/supabase';
 
 export default function AdminDashboard() {
-  const stats = [
+  const [stats, setStats] = useState([
     { label: 'Groupes', value: '0', icon: '👥', href: '/admin/groups' },
     { label: 'Étudiants', value: '0', icon: '🎓', href: '/admin/students' },
     { label: 'Présences', value: '0', icon: '📋', href: '/admin/attendance' },
-    { label: 'Paiements', value: '0', icon: '💰', href: '/admin/attendance' },
-  ];
+    { label: 'Paiements en attente', value: '0', icon: '💰', href: '/admin/attendance' },
+  ]);
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      const [groupsRes, studentsRes, attendanceRes, paymentsRes] = await Promise.all([
+        supabase.from('groups').select('*', { count: 'exact', head: true }),
+        supabase.from('students').select('*', { count: 'exact', head: true }),
+        supabase.from('attendance').select('*', { count: 'exact', head: true }).eq('status', 'present'),
+        supabase.from('group_students').select('*', { count: 'exact', head: true }).eq('payment_status', 'pending'),
+      ]);
+
+      setStats([
+        { label: 'Groupes', value: (groupsRes.count || 0).toString(), icon: '👥', href: '/admin/groups' },
+        { label: 'Étudiants', value: (studentsRes.count || 0).toString(), icon: '🎓', href: '/admin/students' },
+        { label: 'Présences', value: (attendanceRes.count || 0).toString(), icon: '📋', href: '/admin/attendance' },
+        { label: 'Paiements en attente', value: (paymentsRes.count || 0).toString(), icon: '💰', href: '/admin/attendance' },
+      ]);
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
 
   return (
     <div className="space-y-8">

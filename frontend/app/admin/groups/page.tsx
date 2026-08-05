@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/app/lib/supabase';
 
 interface Group {
   id: string;
@@ -14,15 +15,55 @@ interface Group {
   createdAt: string;
 }
 
-const DAYS_OF_WEEK = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' , 'Dimanche'];
+const DAYS_OF_WEEK = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
 
 export default function GroupManagement() {
   const [groups, setGroups] = useState<Group[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     schedule: [{ day: 'Lundi', startTime: '09:00', endTime: '11:00' }],
   });
+
+  useEffect(() => {
+    fetchGroups();
+  }, []);
+
+  const fetchGroups = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('groups')
+        .select(`
+          id,
+          name,
+          schedule,
+          created_at,
+          group_students (count)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (data) {
+        const formattedGroups: Group[] = data.map((g: any) => ({
+          id: g.id,
+          name: g.name,
+          schedule: g.schedule || [],
+          studentCount: g.group_students?.[0]?.count || 0,
+          createdAt: g.created_at,
+        }));
+        setGroups(formattedGroups);
+      }
+    } catch (err: any) {
+      console.error('Error fetching groups:', err);
+      setError(err.message || 'Erreur lors du chargement des groupes');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAddSchedule = () => {
     setFormData({
@@ -44,28 +85,66 @@ export default function GroupManagement() {
     setFormData({ ...formData, schedule: newSchedule });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim()) return;
 
-    const newGroup: Group = {
-      id: Date.now().toString(),
-      name: formData.name,
-      schedule: formData.schedule,
-      studentCount: 0,
-      createdAt: new Date().toISOString(),
-    };
+    try {
+      const { data, error } = await supabase
+        .from('groups')
+        .insert([{
+          name: formData.name,
+          schedule: formData.schedule,
+        }])
+        .select(`
+          id,
+          name,
+          schedule,
+          created_at,
+          group_students (count)
+        `)
+        .single();
 
-    setGroups([...groups, newGroup]);
-    setFormData({
-      name: '',
-      schedule: [{ day: 'Lundi', startTime: '09:00', endTime: '11:00' }],
-    });
-    setShowForm(false);
+      if (error) throw error;
+
+      if (data) {
+        const newGroup: Group = {
+          id: data.id,
+          name: data.name,
+          schedule: data.schedule || [],
+          studentCount: data.group_students?.[0]?.count || 0,
+          createdAt: data.created_at,
+        };
+        setGroups([newGroup, ...groups]);
+      }
+
+      setFormData({
+        name: '',
+        schedule: [{ day: 'Lundi', startTime: '09:00', endTime: '11:00' }],
+      });
+      setShowForm(false);
+    } catch (err: any) {
+      console.error('Error creating group:', err);
+      alert('Erreur: ' + err.message);
+    }
   };
 
-  const handleDeleteGroup = (id: string) => {
-    setGroups(groups.filter((group) => group.id !== id));
+  const handleDeleteGroup = async (id: string) => {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce groupe ?')) return;
+    
+    try {
+      const { error } = await supabase
+        .from('groups')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setGroups(groups.filter((group) => group.id !== id));
+    } catch (err: any) {
+      console.error('Error deleting group:', err);
+      alert('Erreur lors de la suppression: ' + err.message);
+    }
   };
 
   return (
@@ -83,6 +162,12 @@ export default function GroupManagement() {
           {showForm ? 'Annuler' : '+ Nouveau groupe'}
         </button>
       </div>
+
+      {error && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+          {error}
+        </div>
+      )}
 
       {/* Form */}
       {showForm && (
@@ -175,7 +260,9 @@ export default function GroupManagement() {
 
       {/* Groups List */}
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-        {groups.length === 0 ? (
+        {loading ? (
+          <div className="p-12 text-center text-gray-500">Chargement des groupes...</div>
+        ) : groups.length === 0 ? (
           <div className="p-12 text-center">
             <div className="text-4xl mb-4">👥</div>
             <p className="text-gray-600 text-lg mb-4">Aucun groupe créé yet</p>

@@ -4,10 +4,32 @@ import React from 'react';
 import Link from 'next/link';
 import PatientForm, { type FormData } from '../components/StudientForm';
 
+import { supabase } from '../lib/supabase';
+
 export default function InscriptionEtudiantPage() {
-  const handleSubmit = (patientData: FormData) => {
-    console.log("Données d'inscription de l'étudiant:", patientData);
-    alert("L'étudiant a été inscrit avec succès!");
+  const handleSubmit = async (patientData: FormData) => {
+    try {
+      const { error } = await supabase
+        .from('students')
+        .insert([{
+          full_name: patientData.fullName,
+          student_number: patientData.studentNumber,
+          parent_number: patientData.parentNumber,
+          class: patientData.class,
+          section: patientData.section,
+          institute_name: patientData.instituteName,
+        }]);
+
+      if (error) {
+        console.error('Error inserting student:', error);
+        alert("Erreur lors de l'inscription : " + error.message);
+      } else {
+        alert("L'étudiant a été inscrit avec succès!");
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      alert('Une erreur inattendue est survenue.');
+    }
   };
 
   return (
