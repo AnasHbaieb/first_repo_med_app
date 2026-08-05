@@ -51,8 +51,12 @@ export default function StudentManagement() {
         }));
         setAvailableStudents(students);
       }
-    } catch (err) {
-      setError('Erreur lors du chargement des étudiants');
+    } catch (err: any) {
+      if (err instanceof TypeError || err.message === 'Failed to fetch') {
+        setError("Impossible de se connecter au serveur. Vérifiez que l'API est en cours d'exécution sur le port 4000.");
+      } else {
+        setError('Erreur lors du chargement des étudiants');
+      }
       console.error('[v0]', err);
     } finally {
       setLoading(false);
